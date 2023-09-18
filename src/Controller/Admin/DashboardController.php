@@ -6,6 +6,7 @@ use App\Controller\Admin\PostCrudController;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -36,6 +37,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Categories', 'fa fa-folder', Category::class);
         yield MenuItem::linkToCrud('Posts', 'fa fa-cloud', Post::class);
         yield MenuItem::linkToCrud('Comments', 'fa fa-comments', Comment::class);
+        yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
 
         // yield MenuItem::linkToRoute('Web site', 'fa fa-home', 'app_home');
     }
