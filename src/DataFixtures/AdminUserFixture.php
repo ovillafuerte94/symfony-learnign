@@ -20,11 +20,13 @@ class AdminUserFixture extends Fixture
     {
         /* Get email and password from environment variables */
         $email = $_ENV['APP_ADMIN_EMAIL'];
+        $name = $_ENV['APP_ADMIN_NAME'];
         $password = $_ENV['APP_ADMIN_PASSWORD'];
 
         /* Create a new user with the admin role */
         $user = new User();
         $user->setEmail($email);
+        $user->setName($name);
         $user->setRoles(['ROLE_ADMIN']);
 
          /* Encrypt the password before storing it in the database */
