@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -17,7 +18,10 @@ class CategoryCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setSearchFields(['name'])
+        return $crud
+            ->setEntityLabelInSingular('Category')
+            ->setEntityLabelInPlural('Categories')
+            ->setSearchFields(['name'])
             ->setDefaultSort(['id' => 'DESC']);
     }
     
@@ -26,7 +30,7 @@ class CategoryCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name', 'Name'),
-            TextField::new('slug', 'Slug'),
+            SlugField::new('slug', 'Slug')->setTargetFieldName('name'),
         ];
     }
 }

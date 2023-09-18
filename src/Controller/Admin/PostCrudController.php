@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 
 class PostCrudController extends AbstractCrudController
 {
@@ -19,7 +20,10 @@ class PostCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setSearchFields(['title', 'content'])
+        return $crud
+            ->setEntityLabelInSingular('Post')
+            ->setEntityLabelInPlural('Posts')
+            ->setSearchFields(['title', 'content'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 
@@ -29,7 +33,7 @@ class PostCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(),
             AssociationField::new('category', 'Category'),
             TextField::new('title', 'Title'),
-            TextField::new('slug', 'Slug')->onlyOnForms(),
+            SlugField::new('slug', 'Slug')->setTargetFieldName('title')->onlyOnForms(),
             TextEditorField::new('content', 'Content')->hideOnIndex(),
         ];
     }
