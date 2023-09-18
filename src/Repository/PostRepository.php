@@ -24,8 +24,10 @@ class PostRepository extends ServiceEntityRepository
     public function findLatest(): array
     {
         return $this->createQueryBuilder('p')
+            ->addSelect('comments', 'category')
+            ->leftJoin('p.comments', 'comments')
+            ->leftJoin('p.category', 'category')
             ->orderBy('p.id', 'DESC')
-            ->setMaxResults(12)
             ->getQuery()
             ->getResult();
     }
