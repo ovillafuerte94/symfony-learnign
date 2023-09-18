@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +27,29 @@ class PageController extends AbstractController
     {
         $form = $this->createForm(CommentType::class);
         
+        return $this->render('page/post.html.twig', [
+            'post' => $post,
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('comment/create/{slug}', name: 'app_comment_create')]
+    public function comment_create(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    {
+        $comment = new Comment();
+        $comment->setUser($this->getUser());
+        $comment->setPost($post);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_post', ['slug' => $post->getSlug()]);
+        }
+
         return $this->render('page/post.html.twig', [
             'post' => $post,
             'form' => $form->createView()
